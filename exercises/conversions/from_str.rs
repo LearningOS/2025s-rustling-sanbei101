@@ -30,7 +30,6 @@ enum ParsePersonError {
     // Wrapped error from parse::<usize>()
     ParseInt(ParseIntError),
 }
-
 // I AM NOT DONE
 
 // Steps:
@@ -52,6 +51,26 @@ enum ParsePersonError {
 impl FromStr for Person {
     type Err = ParsePersonError;
     fn from_str(s: &str) -> Result<Person, Self::Err> {
+        if s.is_empty() {
+            return Err(ParsePersonError::Empty);
+        }
+        let parts = s.split(',').collect();
+        if parts.len() != 2 {
+            return Err(ParsePersonError::BadLen);
+        }
+        let name = parts[0].to_string();
+        if name.is_empty() {
+            return Err(ParsePersonError::NoName);
+        }
+        let age = parts[1]
+            .parse::<usize>()
+            .map_err(ParsePersonError::ParseInt)?;
+        if age == 0 {
+            return Err(ParsePersonError::ParseInt(ParseIntError::from(
+                std::num::IntErrorKind::Empty,
+            )));
+        }
+        Ok(Person { name, age })
     }
 }
 
