@@ -1,27 +1,34 @@
-// enums2.rs
-//
-// Execute `rustlings hint enums2` or use the `hint` watch subcommand for a
-// hint.
+#![allow(dead_code)]
 
-// I AM NOT DONE
+#[derive(Debug)]
+struct Point {
+    x: u64,
+    y: u64,
+}
 
 #[derive(Debug)]
 enum Message {
-    Move { x: i32, y: i32 },
+    // TODO: Define the different variants used below.
+    Resize { width: u64, height: u64 },
+    Move(Point),
     Echo(String),
-    ChangeColor(i32, i32, i32),
+    ChangeColor(u64, u64, u64),
     Quit,
 }
 
 impl Message {
     fn call(&self) {
-        println!("{:?}", self);
+        println!("{self:?}");
     }
 }
 
 fn main() {
     let messages = [
-        Message::Move { x: 10, y: 30 },
+        Message::Resize {
+            width: 10,
+            height: 30,
+        },
+        Message::Move(Point { x: 10, y: 15 }),
         Message::Echo(String::from("hello world")),
         Message::ChangeColor(200, 255, 255),
         Message::Quit,
